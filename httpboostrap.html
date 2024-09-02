@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GETBOOSTRAP API Request</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #container {
+            width: 80%;
+            max-width: 600px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        #response {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #fafafa;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>GETBOOSTRAP API Request</h1>
+        <button id="fetch-button">Get Data</button>
+        <div id="response">Response will appear here...</div>
+    </div>
+    <script>
+        document.getElementById('fetch-button').addEventListener('click', () => {
+            fetch('https://api.getboostrap.com/data') // استبدل بعنوان API الخاص بك
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+                })
+                .catch(error => {
+                    document.getElementById('response').textContent = 'Error: ' + error;
+                });
+        });
+    </script>
+</body>
+</html>
