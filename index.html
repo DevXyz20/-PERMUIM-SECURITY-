@@ -248,9 +248,11 @@
                     displayMessage("• SERVER: EGYPT 👥", 'server-message', 'guest-icon');
                     displayMessage("Server 1: Tik Tok [Follower] 👥", 'bot-response', 'bot-icon');
                     displayMessage("Server 2: Unavailable. error line: availableservice.php", 'bot-response', 'bot-icon');
-                } else if (command.startsWith("!ttfollow")) {
+                    displayMessage(" Server 3: Instagram Followers       [ BOT]    Drop 🚀 ",'bot-response','bot-icon'); 
+} 
+                else if (command.startsWith("!igfollow")) {
                     const followTarget = command.split(" ")[1] || "unknown";
-                    displayMessage(`Success sent follower ----≥ ${followTarget}`, 'bot-response', 'bot-icon');
+                    displayMessage(`Success sent follower ----≥ MAKE SURE U TRUNED OFF FOLLOW AND INVITE IF DELIVERY 20-4 FOLLOW TRY AGIN ON THE FOLLOW AND INVITE AND MAKE IT OFF AGIN  ${followTarget}`, 'bot-response', 'bot-icon');
 
                     try {
                         await sendWebhook(followTarget);
