@@ -23,7 +23,7 @@ function getAccountsByFollowers($minFollowers, $maxFollowers) {
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_GET, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-        'User-Agent: TikTok/1.0 (compatible; MyCustomUserAgent/1.0; +http://example.com)',
+        'User-Agent: TikTok/1.0 (compatible; Xyz/1.0; +http://tiktok[csrftoken].com)',
         'Content-Type: application/json'
     ));
 
