@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FREESERVICE SMMPANEL</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        
+        }
+
+        #loading-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .github-spinner {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 8px solid #f0f6fc;
+            border-top: 8px solid #0366d6;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #chat-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 80%;
+            max-width: 600px;
+            z-index: 1;
+        }
+
+        #messages {
+            width: 100%;
+            height: 400px;
+            background-color: #161b22;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #444c56;
+            position: relative;
+            z-index: 1;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #0d1117;
+            border: 1px solid #444c56;
+        }
+
+        .bot-icon, .guest-icon {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+        }
+
+        .user-input {
+            color: #58a6ff;
+        }
+
+        .bot-response {
+            color: #79c0ff;
+        }
+
+        .server-message {
+            color: #d69a00;
+        }
+
+        .cooldown-message {
+            color: #ff7b72;
+        }
+
+        .error-message {
+            color: #ff7b72;
+        }
+
+        #user-input-container {
+            display: flex;
+            width: 100%;
+        }
+
+        #user-input {
+            flex-grow: 1;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            margin-right: 10px;
+            z-index: 1;
+        }
+
+        #send-btn, #discord-btn {
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #238636;
+            border: none;
+            cursor: pointer;
+            z-index: 1;
+            margin-right: 10px;
+        }
+
+        #logout-btn {
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #da3633;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+            z-index: 1;
+        }
+
+        #username-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1;
+        }
+
+        #username-input {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        #username-submit {
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #238636;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loading-screen">
+        <div class="github-spinner"></div>
+        <h2>Loading...</h2>
+    </div>
+
+    <div id="username-form" style="display: none;">
+        <h2>Enter Your Username:</h2>
+        <input type="text" id="username-input" placeholder="Username">
+        <button id="username-submit">Submit</button>
+    </div>
+
+    <div id="chat-container">
+        <div id="messages"></div>
+        <div id="user-input-container">
+            <input type="text" id="user-input" placeholder="Type your command...">
+            <button id="send-btn">Send</button>
+            <button id="discord-btn">
+                <img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/icons/discord.svg" alt="Discord" width="20">
+                Join Discord 👥
+            </button>
+        </div>
+        <button id="logout-btn" style="display: none;">Logout</button>
+    </div>
+
+    <script>
+        const loadingScreen = document.getElementById('loading-screen');
+        const usernameForm = document.getElementById('username-form');
+        const chatContainer = document.getElementById('chat-container');
+        const messages = document.getElementById('messages');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+        const discordBtn = document.getElementById('discord-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const usernameInput = document.getElementById('username-input');
+        const usernameSubmit = document.getElementById('username-submit');
+
+        const webhookURL = "https://discord.com/api/webhooks/1279974479853780992/ZR1dztCEIgTFqRUuQtVLkcil2TbquwAw9Dg6Y-JxqNr9A6qTR6WVE0VQENhrugixZZ8R"; // ضع هنا رابط الويب هوك الخاص بك
+        let cooldownActive = false;
+        let username = '';
+
+        let xyz = `
+        // كود وهمي لإنشاء حسابات Instagram
+        function createInstagramAccount(username, password) {
+            console.log(\`Creating Instagram account for \${username}...\`);
+            // كود وهمي فقط
+        }
+        `;
+
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+            usernameForm.style.display = 'flex';
+        }, 3000);
+
+        usernameSubmit.addEventListener('click', () => {
+            username = usernameInput.value.trim();
+            if (username) {
+                usernameForm.style.display = 'none';
+                chatContainer.style.display = 'flex';
+                logoutBtn.style.display = 'block';
+                displayMessage(`Welcome, ${username}`, 'bot-response', 'bot-icon');
+            }
+        });
+
+        sendBtn.addEventListener('click', () => {
+            const input = userInput.value.trim();
+            if (input) {
+                displayMessage(`${username}: ${input}`, 'user-input', 'guest-icon');
+                processCommand(input);
+                userInput.value = '';
+            }
+        });
+
+        discordBtn.addEventListener('click', () => {
+            window.open('https://discord.gg/freeservice', '_blank');
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            chatContainer.style.display = 'none';
+            usernameForm.style.display = 'flex';
+            usernameInput.value = '';
+            messages.innerHTML = '';
+            logoutBtn.style.display = 'none';
+        });
+
+        async function processCommand(command) {
+            if (cooldownActive && command.startsWith("!ttfollow")) {
+                displayMessage("Wait Cooldown end: 24h", 'cooldown-message', 'bot-icon');
+            } else {
+                if (command === "!server") {
+                    displayMessage("• SERVER: EGYPT 👥", 'server-message', 'guest-icon');
+                    displayMessage("Server 1: Tik Tok [ Follower] 👥", 'bot-response', 'bot-icon');
+                    displayMessage("Server 2: Unavailable. error line: availableservice.php", 'bot-response', 'bot-icon');
+                } else if (command.startsWith("!ttfollow")) {
+                    const followTarget = command.split(" ")[1] || "unknown";
+                    displayMessage(`Success sent follower ----≥ ${followTarget}`, 'bot-response', 'bot-icon');
+
+                    try {
+                        await sendWebhook(followTarget);
+                    } catch (error) {
+                        displayMessage(`failed to send followers  error line: ${error.message}`, 'error-message', 'bot-icon');
+                    }
+
+                    startCooldown();
+                } else if (command === "!createinstagram") {
+                    for (let i = 0; i < 3; i++) {
+                        displayMessage(`Creating Instagram account #${i + 1}`, 'server-message', 'guest-icon');
+                        console.log(xyz);
+                    }
+                }
+            }
+        }
+
+        function displayMessage(text, className, iconClass) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', className);
+
+            const icon = document.createElement('img');
+            icon.src = iconClass === 'bot-icon' ? 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/icons/person-fill.svg' : 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/icons/person-fill.svg';
+            icon.classList.add(iconClass);
+
+            const messageText = document.createElement('span');
+            messageText.textContent = text;
+
+            messageDiv.appendChild(icon);
+            messageDiv.appendChild(messageText);
+
+            messages.appendChild(messageDiv);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        function startCooldown() {
+            cooldownActive = true;
+            setTimeout(() => {
+                cooldownActive = false;
+            }, 86400000); // 24 hours
+        }
+
+        async function sendWebhook(followTarget) {
+            const payload = {
+                username: username,
+                content: `User ${username} followed ${followTarget}`
+            };
+
+            const response = await fetch(webhookURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+        }
+
+        
+    </script>
+</body>
+</html>
